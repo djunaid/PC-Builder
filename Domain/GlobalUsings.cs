@@ -1,0 +1,1 @@
+﻿global using RecipeBuilder.Domain.Common;
