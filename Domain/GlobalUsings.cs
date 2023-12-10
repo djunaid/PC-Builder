@@ -1,2 +1,2 @@
-﻿global using RecipeBuilder.Domain.Common;
-global using RecipeBuilder.Domain.Constants;
+﻿global using PCBuilder.Domain.Common;
+global using PCBuilder.Domain.Constants;

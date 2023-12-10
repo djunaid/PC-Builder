@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RecipeBuilder.Domain.Common
+namespace PCBuilder.Domain.Common
 {
     public abstract class BaseEntity<T> 
     {

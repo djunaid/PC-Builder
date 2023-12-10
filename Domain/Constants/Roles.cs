@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RecipeBuilder.Domain.Constants
+namespace PCBuilder.Domain.Constants
 {
     public abstract class Roles
     {
