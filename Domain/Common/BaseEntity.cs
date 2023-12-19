@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace PCBuilder.Domain.Common
 {
-    public abstract class BaseEntity<T> 
+    public abstract class BaseEntity 
     {
-        public T id { get; set; }
+        public int Id { get; set; }
 
         private readonly List<BaseEvent> _domainEvents = new();
 
