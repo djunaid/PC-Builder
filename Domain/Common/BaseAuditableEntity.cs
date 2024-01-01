@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PCBuilder.Domain.Common
 {
-    public abstract class BaseAuditableEntity : BaseEntity<int>
+    public abstract class BaseAuditableEntity : BaseEntity
     {
         public DateTimeOffset Created { get; set; }
 
