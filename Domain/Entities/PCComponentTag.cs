@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace PCBuilder.Domain.Entities
 {
-    public class ComponentTag
+    public class PCComponentTag
     {
-        public int ComponentId { get; set; }
+        public int PCComponentId { get; set; }
 
         public int TagId { get; set; }
        

@@ -15,5 +15,7 @@ namespace PCBuilder.Domain.Common
         public DateTimeOffset LastModified { get; set; }
 
         public string? LastModifiedBy { get; set; }
+
+        public byte[] SystemTimeStamp { get; set; }
     }
 }

@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace PCBuilder.Domain.Entities
 {
-    public class ComponentPrice  : BaseAuditableEntity
+    public class PriceComponent  : BaseAuditableEntity
     {
-        public int ComponentID { get; set; }
         public decimal Price { get; set; }
 
         public DateTime EffectiveDate { get; set; }
 
         public DateTime ExpriyDate { get; set; }
 
-        public Component Component { get; }
+        public int PCComponentId { get; set; }
+        public PCComponent PCComponent { get; set; } = null!;
     }
 }
