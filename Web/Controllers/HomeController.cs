@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models;
 
@@ -20,6 +21,7 @@ public class HomeController : Controller
         return View();
     }
 
+    [Authorize(Policy="")]
     public IActionResult Privacy()
     {
         return View();

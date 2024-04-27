@@ -1,0 +1,6 @@
+ dotnet ef migrations remove -p Infrastructure.csproj -s ../Web/Web.csproj
+
+ dotnet ef migrations add InitialCreate -p Infrastructure.csproj -s ../Web/Web.csproj -o Data/Migrations/
+
+
+ dotnet ef database update -p Infrastructure.csproj -s ../Web/Web.csproj

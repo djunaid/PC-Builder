@@ -14,19 +14,20 @@ namespace Application.Common.Behaviours
     {
         private readonly Stopwatch _timer;
         private readonly ILogger<TRequest> _logger;
-        private readonly IUser _user;
+       // private readonly IUser _user;
         private readonly IIdentityService _identityService;
 
         public PerformanceBehaviour(
-            ILogger<TRequest> logger,
-            IUser user,
-            IIdentityService identityService)
+            ILogger<TRequest> logger
+       //     IUser user,
+          //  IIdentityService identityService
+          )
         {
             _timer = new Stopwatch();
 
             _logger = logger;
-            _user = user;
-            _identityService = identityService;
+        //    _user = user;
+         //   _identityService = identityService;
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -42,18 +43,22 @@ namespace Application.Common.Behaviours
             if(elapsedMilliseconds > 500)
             {
                 var requestName = typeof(TRequest).Name;
-                var userId = _user.Id ?? string.Empty;
+          //      var userId = _user.Id ?? string.Empty;
                 var userName = string.Empty;
 
 
-                if (!string.IsNullOrEmpty(userId))
+               /* if (!string.IsNullOrEmpty(userId))
                 {
                  userName = await _identityService.GetUserNameAsync(userId);
-                }
+                }*/
 
                 _logger.LogWarning("PCBuilder Long Running Request: {Name} ({ElapsedMilliseconds} " +
-                    "milliseconds) {@UserId} {@UserName} {@Request}",
-                    requestName, elapsedMilliseconds, userId, userName, request);
+                    "milliseconds) " +
+                    //"{@UserId}" +
+                    " {@UserName} {@Request}",
+                    requestName, elapsedMilliseconds, 
+                    //userId, 
+                    userName, request);
 
 
             }

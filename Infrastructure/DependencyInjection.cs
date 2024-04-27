@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PCBuilder.Domain.Constants;
 
 
+
 namespace Infrastructure
 {
     public static class DependencyInjection
@@ -20,6 +21,7 @@ namespace Infrastructure
 
             Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
+            // commented because unable to resolve migration issue
             //services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
             //services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
@@ -42,12 +44,18 @@ namespace Infrastructure
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             */
 
-            services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Default Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+            });
 
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddSingleton(TimeProvider.System);
-            services.AddScoped<IIdentityService, IdentityService>();
+            //services.AddScoped<IIdentityService, IdentityService>();
 
             services.AddAuthorizationCore(options =>
                 options.AddPolicy("CanPurge", policy => policy.RequireRole(Roles.Administrator)));

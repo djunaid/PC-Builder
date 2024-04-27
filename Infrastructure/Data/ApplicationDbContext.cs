@@ -25,6 +25,7 @@ namespace Infrastructure.Data
 
         public DbSet<Tag> Tag => Set<Tag>();
 
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

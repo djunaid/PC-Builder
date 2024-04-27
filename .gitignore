@@ -478,3 +478,4 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+/Application/Tags/Queries/GetAllTags.cs

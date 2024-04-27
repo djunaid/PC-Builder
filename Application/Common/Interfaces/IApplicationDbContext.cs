@@ -1,9 +1,11 @@
 ﻿using PCBuilder.Domain.Entities;
 
 
+
+
 namespace Application.Common.Interfaces
 {
-    public interface IApplicationDbContext
+    public interface IApplicationDbContext 
     {
         public DbSet<PCComponent> PCComponent { get; }
 
