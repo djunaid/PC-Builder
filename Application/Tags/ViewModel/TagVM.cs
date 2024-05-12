@@ -1,4 +1,5 @@
-﻿using PCBuilder.Domain.Entities;
+﻿using Application.Common.Models;
+using PCBuilder.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,8 @@ namespace Application.Tags.ViewModel
 
         public string? LastModifiedBy { get; set; }
 
-        public byte[] SystemTimeStamp { get; set; }
+        public byte[]? SystemTimeStamp { get; set; }
 
-
-
+        public Result? OperationResult { get; set; }
     }
 }

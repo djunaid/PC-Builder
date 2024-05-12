@@ -54,7 +54,7 @@ namespace Application.Tags.Commands
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
 
         }

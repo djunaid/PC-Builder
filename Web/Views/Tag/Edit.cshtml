@@ -1,0 +1,30 @@
+﻿@model TagVM
+
+<div>
+    <h1 class="mb-3">Edit Tag</h1>
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form asp-controller="Tag" asp-action="CreateTag" class="form-group" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="SystemTimeStamp" />
+
+        
+        <div class="form-group">
+        <label asp-for="Name" class="form-label">Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+        <label asp-for="Value" class="form-label">Value</label>
+        <input asp-for="Value" class="form-control" />
+        <span asp-validation-for="Value" class="text-danger"></span>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Save</button>
+
+
+    </form>
+</div>
+
+

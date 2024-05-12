@@ -1,42 +1,42 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@using Application.Tags.ViewModel;
-
+﻿
 @model IEnumerable<TagVM>;
 @{
-                    <h2>Tags</h2><br>
-                    <a class="btn btn-primary" asp-controller="Tag" asp-action="Index">Create Tag</a>
+        <h2>Tags</h2>
+        <br>
+        <a class="btn btn-primary" asp-controller="Tag" asp-action="Create">Create Tag</a>
 
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Id</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Value</th>
-                                <th scope="col">Created By</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach(var tag in Model){
-                            <tr>
-                                <td>@tag.Id</td>
-                                    <td>@tag.Name</td>
-                                    <td>@tag.Value</td>
-                                    <td>@tag.CreatedBy</td>
-                                    <td><a class="btn btn-secondary" asp-action="Tag" asp-route-Id="@tag.Id" >Edit</a></td>
-                                    <td><button class="btn btn-danger" onclick="doDelete(@tag.Id)">Delete</button></td>
-                            </tr>
-                        }
-                        </tbody>
-                    </table>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Created By</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var tag in Model)
+            {
+                    <tr id='@($"tag_row_{tag.Id}")'>
+                        <td>@tag.Id</td>
+                        <td>@tag.Name</td>
+                        <td>@tag.Value</td>
+                        <td>@tag.CreatedBy</td>
+                        <td><a class="btn btn-secondary mr-3" asp-action="Edit" asp-route-Id="@tag.Id">Edit</a>
+                        <button class="btn btn-danger" onclick="doDelete(@tag.Id)">Delete</button></td>
+                    </tr>
+            }
+            </tbody>
+        </table>
 
 }
 
 <script type="text/javascript">
     console.log("Hi");
-    function doDelete(Id)
-    { 
-        console.log(Id);
+    function doDelete(Id) {
+       // console.log(document.getElementById("tag_row_" + Id));
+
+        document.getElementById("tag_row_" + Id).remove();
     }
 </script>

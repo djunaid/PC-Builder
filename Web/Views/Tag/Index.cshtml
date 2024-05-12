@@ -1,26 +1,29 @@
-﻿    @using Application.Tags.ViewModel;
+﻿@model IEnumerable<TagVM>;
+@{
+    <h2>Tags</h2>
+    <br>
     
-    @model TagVM
 
-    <div>
-        <h1>Tag</h1>
-        <form asp-controller="Tag" asp-action="CreateTag" method="post">
-        Name: <input asp-for="Name"/>
-        Value: <input asp-for="Value" />
-        
-        
-                @if (Model is null){
-                <button class="btn btn-primary" type="submit">Create</button>
-                }
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Value</th>
+                <th scope="col">Created By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tag in Model)
+            {
+                <tr>
+                    <td>@tag.Id</td>
+                    <td>@tag.Name</td>
+                    <td>@tag.Value</td>
+                    <td>@tag.CreatedBy</td>                   
+                </tr>
+            }
+        </tbody>
+    </table>
 
-                else{
-                <button class="btn btn-primary" type="submit">Update</button>
-                }
-        
-                
-                
-        </form>
-    </div>   
-
-
-
+}
