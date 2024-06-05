@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
+using Infrastructure.Repositories.Interface;
 using PCBuilder.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -21,61 +22,88 @@ public record UpdateTagCommand : IRequest<Result>
 
     public DateTimeOffset? UpdatedDate { get; set; } = DateTimeOffset.Now;
 
-    public byte[] TimeStamp { get; set; }
+    public byte[] SystemTimeStamp { get; set; }
             
 }
 
 public class UpdateTagHandler : IRequestHandler<UpdateTagCommand, Result>
 {
-    private readonly IApplicationDbContext _context;
-    public UpdateTagHandler(IApplicationDbContext context)
+
+    private readonly ITagRepository _tagRepository;
+    public UpdateTagHandler(ITagRepository tagRepository)
     {
-        _context = context;
+        _tagRepository = tagRepository;
     }
 
     public async Task<Result> Handle(UpdateTagCommand request, CancellationToken cancellationToken)
     {
         List<string>? errors = new List<string>();
+        var result = new Result(true, new List<string>());
         try
         {
-            var tag = _context.Tag.FirstOrDefault(x => x.Id == request.Id);
+            var tag = await _tagRepository.GetTagByIdAsync(request.Id, cancellationToken);
 
             if (tag is null)
             {
-                throw new ArgumentException("Id not found");
+                result.Succeeded = false;
+                errors.Add("Record was deleted by someone.");
+                result.Errors = errors!.ToArray();
             }
+
+            
 
             tag.Name = request.Name;
             tag.Value = request.Value;
             tag.LastModifiedBy = request.UpdatedBy;
-            tag.LastModified = request.UpdatedDate!.Value;
-            tag.SystemTimeStamp = request.TimeStamp;
+            tag.LastModified = request.UpdatedDate!.Value;            
            
-            _context.Tag.Update(tag);
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-            var result = new Result(true, null);
+            await _tagRepository.UpdateTagAsync(tag, cancellationToken);
 
             return result;
 
         }
         catch(DbUpdateConcurrencyException ex) {
-            errors.Add(ex.Message);
 
-            var dbTag = (Tag)ex.Entries.FirstOrDefault().Entity;
+            result.Succeeded = false;
+            var exceptionTag = ex.Entries.Single();
+            var clientTag = (Tag)exceptionTag.Entity;
+            var dbTagEntry = exceptionTag.GetDatabaseValues();
 
-            var result = new Result(false, errors);
+            if(dbTagEntry is null)
+            {
+                
+                errors.Add("The record was removed.");
+                result.Errors = errors!.ToArray();
+                return result;
+            }
+
+            var dbTagValue = (Tag)dbTagEntry.ToObject();
+
+            if(dbTagValue.Name != clientTag.Name)
+            {
+                errors.Add($"Name: Current value = {dbTagValue.Name}");
+            }
+            if(dbTagValue.Value != clientTag.Value)
+            {
+                errors.Add($"Value: Current value = {dbTagValue.Value}");
+            }
+
+            errors.Add("The record you are trying to update is already updated by other user, /n Please go back to the list and try updating again");
+
+          
+            result.Errors = errors!.ToArray();
             return result;
         } catch(ArgumentException ex)
         {
             errors.Add(ex.Message);
-            var result = new Result(false, errors);
+            result.Succeeded = false;
+            result.Errors = errors!.ToArray();            
             return result;
         } catch (DbUpdateException ex)
         {
             errors.Add(ex.Message);
-            var result = new Result(false, errors);
+            result.Succeeded = false;
+            result.Errors = errors!.ToArray();
             return result;
         }
     }

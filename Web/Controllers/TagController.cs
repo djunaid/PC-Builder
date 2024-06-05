@@ -3,6 +3,7 @@ using Application.Tags.Queries;
 using Application.Tags.ViewModel;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
+    [Authorize]
     public class TagController : Controller
     {
 
@@ -64,15 +66,20 @@ namespace Web.Controllers
             }
 
             var result = await _mediatr.Send(new UpdateTagCommand() { Id = tagvm.Id 
-                            , Name = tagvm.Name , TimeStamp = tagvm.SystemTimeStamp , UpdatedBy = "admin" , UpdatedDate = DateTime.Now, Value = tagvm.Value});
+                            , Name = tagvm.Name , SystemTimeStamp = tagvm.SystemTimeStamp , UpdatedBy = "admin" , UpdatedDate = DateTime.Now, Value = tagvm.Value});
+
+            tagvm.OperationResult = result;
 
             if (result.Succeeded)
-            {
+            {                
                 return RedirectToAction("Index");
             }
 
             tagvm.OperationResult = result;
-
+            foreach(var error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
+            }
             return View(tagvm);
         }
 

@@ -1,0 +1,39 @@
+﻿
+@model PCComponentVM
+@inject IComponentService _iComponentService
+
+
+<div>
+    <h1 class="mb-4">Component</h1>
+</div>
+
+<div class="row">
+    <h3 class="mb-3">Create</h3>
+
+    <form asp-action="create">
+
+        <input type="hidden" id="selectedTags" />
+
+        <div class="mb-2">
+        <label asp-for="Name" class="form-label">Component Name</label>
+        <input asp-for="Name" class="form-control" />
+        </div>
+        
+        <div class="mb-2">
+            <label asp-for="Type" class="form-label">Component Type</label>
+            <input asp-for="Type" class="form-control" />
+        </div>
+       
+
+        <div class="mb-2">
+            <label asp-for="Price" class="form-label">Price</label>
+            <input asp-for="Price" class="form-control" />
+        </div>        
+
+        <select asp-items="await _iComponentService.GetAllTagsForSelect()"></select>
+           
+        <input  class="btn btn-primary" value="Save" />
+        
+
+    </form>
+</div>

@@ -28,6 +28,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Identity\Data\" />
-    <Folder Include="Views\PCComponent\" />
   </ItemGroup>
 </Project>

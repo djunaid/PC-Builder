@@ -1,7 +1,10 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Models.Interface;
 using Infrastructure.Data;
 using Infrastructure.Data.Interceptors;
 using Infrastructure.Identity;
+using Infrastructure.Repositories.Interface;
+using Infrastructure.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -36,7 +39,8 @@ namespace Infrastructure
 
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-
+            services.AddTransient<ITagRepository, TagRepository>();
+            services.AddTransient<IPCComponentRepository, PCComponentRepository>();
 
             /*services
                 .AddDefault<ApplicationUser>()

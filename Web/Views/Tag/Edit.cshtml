@@ -1,10 +1,12 @@
 ﻿@model TagVM
 
+
 <div>
     <h1 class="mb-3">Edit Tag</h1>
 
+   
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <form asp-controller="Tag" asp-action="CreateTag" class="form-group" method="post">
+    <form asp-controller="Tag" asp-action="Edit" class="form-group" method="post">
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="SystemTimeStamp" />
 

@@ -28,9 +28,9 @@ namespace Application.Common.Mappings
             };
         }
 
-        public static List<TagVM> ToVMList(this List<Tag> origin) {  
+        public static List<TagVM> ToVMList(this IEnumerable<Tag> origin) {  
             
-           return origin.Select(x => x.ToVM()).ToList(); ;
+           return origin.Select(x => x.ToVM()).ToList();
         
         }
     }

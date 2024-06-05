@@ -3,6 +3,7 @@ using Application.Common.Mappings;
 using Application.Common.Models;
 using Application.Common.Security;
 using Application.Tags.ViewModel;
+using Infrastructure.Repositories.Interface;
 using PCBuilder.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -20,20 +21,25 @@ namespace Application.Tags.Queries
     
     public class GetTagByIdQueryHandler : IRequestHandler<GetTagByIdQuery, TagVM>
     {
-        private readonly IApplicationDbContext _context;        
+        private readonly ITagRepository _tagRepository;
 
-        public GetTagByIdQueryHandler(IApplicationDbContext context)
-        {
-            _context = context;
-            
+        public GetTagByIdQueryHandler(ITagRepository tagRepository)
+        {           
+            _tagRepository = tagRepository;
         }
 
         public async Task<TagVM> Handle(GetTagByIdQuery request, CancellationToken cancellationToken)
         {
-            var currentTag = await _context.Tag.Where(x=> x.Id == request.Id).FirstOrDefaultAsync(cancellationToken);
+            try
+            {
+                var tag = await _tagRepository.GetTagByIdAsync(request.Id, cancellationToken);
 
-
-            return currentTag.ToVM();
+                return tag.ToVM();
+            } 
+            catch (Exception ex)
+            {
+                return new TagVM();     
+            }                        
         }
     }
 }

@@ -18,8 +18,8 @@ namespace PCBuilder.Domain.Entities
         [Column(TypeName="decimal(5,2)")]
         public decimal Rating { get; set; }
 
-        public List<Tag> Tags { get; } = new();
+        public List<Tag> Tags { get;} = new();
 
-        public ICollection<PriceComponent> PriceComponent { get; } = new List<PriceComponent>();
+        public List<PriceComponent> PriceComponent { get; } = new List<PriceComponent>();
     }
 }

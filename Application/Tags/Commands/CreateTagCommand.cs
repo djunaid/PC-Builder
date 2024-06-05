@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Tags.ViewModel;
+using Infrastructure.Repositories.Interface;
 using PCBuilder.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -26,29 +27,29 @@ namespace Application.Tags.Commands
     public class CreateTagHandler : IRequestHandler<CreateTagCommand, int>
     {
 
-        public readonly IApplicationDbContext _context;
+        private readonly ITagRepository _tagRepository;
 
-        public CreateTagHandler(IApplicationDbContext context)
+        public CreateTagHandler(ITagRepository tagRepository)
         {
-            _context = context;
+            
+            _tagRepository = tagRepository;
         }
         public async Task<int> Handle(CreateTagCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                Tag tagVM = new();
-                tagVM.Name = request.Name;
-                tagVM.Value = request.Value;
-                tagVM.CreatedBy = request.CreatedBy;
-                tagVM.LastModifiedBy = request.CreatedBy;
-                tagVM.Created = request.CreatedDate;
-                tagVM.LastModified = request.CreatedDate;
+                Tag tag = new();
+                tag.Name = request.Name;
+                tag.Value = request.Value;
+                tag.CreatedBy = request.CreatedBy;
+                tag.LastModifiedBy = request.CreatedBy;
+                tag.Created = request.CreatedDate;
+                tag.LastModified = request.CreatedDate;
 
-                var tag= await _context.Tag.AddAsync(tagVM);
-                await _context.SaveChangesAsync(cancellationToken);
+
+                var newTagId = await _tagRepository.CreateTagAsync(tag, cancellationToken);
                 
-
-                return tag.Entity.Id;
+                return newTagId;
 
 
             }

@@ -8,16 +8,16 @@ namespace Application.Common.Models
 {
     public class Result
     {
-        internal Result(bool succeeded, IEnumerable<string> errors)
+        internal Result(bool succeeded, IEnumerable<string>? errors)
         {
             Succeeded = succeeded;
 
-            Errors = errors.ToArray();
+            Errors = errors?.ToArray();
         }
 
-        public bool Succeeded { get; init; }
+        public bool Succeeded { get; set; }
 
-        public string[] Errors { get; init; }
+        public string[] Errors { get; set; }
 
         public static Result Success()
         {
