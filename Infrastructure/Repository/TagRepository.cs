@@ -76,7 +76,7 @@ namespace Infrastructure.Repository
         {
             try
             {
-                return await _context.Tag.Where(x => x.Name.StartsWith(name)).AsNoTracking().ToListAsync(cancellationToken);
+                return await _context.Tag.Where(x => x.Name.Contains(name) || x.Value.Contains(name)).AsNoTracking().ToListAsync(cancellationToken);
             }
             catch (Exception)
             {

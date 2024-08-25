@@ -12,9 +12,14 @@ namespace PCBuilder.Domain.Entities
 
         public DateTime EffectiveDate { get; set; }
 
-        public DateTime ExpriyDate { get; set; }
+        public DateTime? ExpriyDate { get; set; } = null;
 
         public int PCComponentId { get; set; }
         public PCComponent PCComponent { get; set; } = null!;
+
+        public PriceComponent()
+        {
+
+        }
     }
 }

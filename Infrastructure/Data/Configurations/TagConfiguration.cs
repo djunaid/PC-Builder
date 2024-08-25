@@ -23,9 +23,9 @@ namespace Infrastructure.Data.Configurations
 
             builder.Property(x => x.SystemTimeStamp).IsConcurrencyToken().IsRowVersion();
 
-            builder.Property(x => x.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+            builder.Property(x => x.CreatedBy).HasMaxLength(256).IsUnicode(false);
 
-            builder.Property(x => x.LastModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+            builder.Property(x => x.LastModifiedBy).HasMaxLength(256).IsUnicode(false);
 
             builder.Property(x => x.Created).IsRequired();
 

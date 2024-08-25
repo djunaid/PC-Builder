@@ -1,6 +1,5 @@
-﻿
-@model PCComponentVM
-@inject IComponentService _iComponentService
+﻿@model PCComponentWithTags
+
 
 
 <div>
@@ -10,30 +9,183 @@
 <div class="row">
     <h3 class="mb-3">Create</h3>
 
-    <form asp-action="create">
-
-        <input type="hidden" id="selectedTags" />
+    <form asp-action="Create" asp-controller="PCComponent" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" id="selectedTags" asp-for="SelectedTags" />
 
         <div class="mb-2">
-        <label asp-for="Name" class="form-label">Component Name</label>
-        <input asp-for="Name" class="form-control" />
+            <label asp-for="PCComponentVM.Name" class="form-label">Component Name</label>
+            <input asp-for="PCComponentVM.Name" class="form-control" />
+            <span asp-validation-for="PCComponentVM.Name" class="text-danger"></span>
         </div>
-        
+
         <div class="mb-2">
-            <label asp-for="Type" class="form-label">Component Type</label>
-            <input asp-for="Type" class="form-control" />
+            <label asp-for="PCComponentVM.Type" class="form-label">Component Type</label>
+            <input asp-for="PCComponentVM.Type" class="form-control" />
+            <span asp-validation-for="PCComponentVM.Type" class="text-danger"></span>
         </div>
-       
+
+
+        <div class="mb-3">
+            <label asp-for="PCComponentVM.Price" class="form-label">Price</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                </div>
+                <input asp-for="PCComponentVM.Price" class="form-control" />
+            </div>
+            <span asp-validation-for="PCComponentVM.Price" class="text-danger"></span>
+        </div>
+
+        @*  <select class="mb-2" asp-items="await _iComponentService.GetAllTagsForSelect()"></select> *@
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+            </div>
+            <input id="tagTypeahead" class=" form-control" placeholder="Search tag name" />
+
+        </div>
+
+        <label class="form-label">Tags</label>
+        <div class="col-md-6">
+            <ul id="tagList" class="list-group mb-5">
+            </ul>
+        </div>
+        <span asp-validation-for="SelectedTags" class="text-danger"></span>
 
         <div class="mb-2">
-            <label asp-for="Price" class="form-label">Price</label>
-            <input asp-for="Price" class="form-control" />
-        </div>        
+        <button class="btn btn-primary" type="submit"><i class="bi bi-floppy"></i>&nbsp Save</button>
+        </div>
 
-        <select asp-items="await _iComponentService.GetAllTagsForSelect()"></select>
-           
-        <input  class="btn btn-primary" value="Save" />
-        
 
     </form>
 </div>
+
+<style type="text/css">
+    .tt-query {
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    }
+
+    .tt-hint {
+        color: #999
+    }
+
+    .tt-menu { /* used to be tt-dropdown-menu in older versions */
+        width: 422px;
+        margin-top: 4px;
+        padding: 4px 0;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+        -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+        box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    }
+
+    .tt-suggestion {
+        padding: 3px 20px;
+        line-height: 24px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+        .tt-suggestion.tt-cursor, .tt-suggestion:hover {
+            color: #fff;
+            background-color: #0097cf;
+        }
+
+        .tt-suggestion p {
+            margin: 0;
+        }
+</style>
+
+
+<script type="text/javascript">
+
+    const removeTag = (id) => {
+        console.log(id);
+        
+        document.getElementById('tag_id_' + id).remove();
+
+        selectedTagIds = selectedTagIds.filter(x => x.id);
+        $('#selectedTags').val(selectedTagIds);
+        console.log($('#selectedTags').val());
+    };
+
+    var selectedTagIds = [];
+
+    $(document).ready(function () {
+
+        var searchTagSource = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace("tagFullName"),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/api/Search#%QUERY',
+                wildcard: '%QUERY',
+                transport: (opts, onSuccess, onError) => {
+                    var url = opts.url.split('#')[0];
+                    var query = opts.url.split('#')[1];
+
+                    var request = JSON.stringify({
+                        query: query
+                    });
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/Search',
+                        contentType: "application/json;charset=UTF-8",
+                        dataType: 'json',
+                        data: request,
+                        success: onSuccess,
+                        error: onError
+                    });
+
+                }
+            }
+        });
+
+        $('#tagTypeahead').typeahead({
+            highlight: true,
+            minLength: 1,
+            hint: true
+        }, {
+            name: 'Tags',
+            displayKey: 'tagFullName',
+            source: searchTagSource
+        });
+
+        $('#tagTypeahead').bind('typeahead:selected', function (evt, value) {
+            console.log(value);
+
+
+            if (selectedTagIds.some(x => x == value.id)){
+                return;
+            }
+
+            var tagelement = document.getElementById('tagList');
+            var tagitem = document.createElement('li');
+            tagitem.className = 'list-group-item';
+            tagitem.id = 'tag_id_' + value.id;
+            var taghtml = '<span>' + value.tagFullName + ' <a class="float-end" onclick=removeTag(' + value.id + ')><i class="bi bi-trash btn btn-danger"></i></a> </span>'
+            tagitem.innerHTML = taghtml;
+            tagelement.appendChild(tagitem);
+
+            setSelectedTag(value.id);
+            $('#tagTypeahead').typeahead('val', '');
+
+        });
+
+        var setSelectedTag =  (ids) =>
+        {
+            selectedTagIds.push(ids);
+
+            $('#selectedTags').val(selectedTagIds);
+            console.log($('#selectedTags').val());
+        }
+
+        });
+
+</script>

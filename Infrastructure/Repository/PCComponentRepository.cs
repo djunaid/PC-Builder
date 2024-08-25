@@ -20,19 +20,17 @@ namespace Infrastructure.Repository
             _dbContext = dbContext;
         }
 
-        public async Task<int> CreateComponentAsync(PCComponent component, int[] tagsIds, PriceComponent priceComponent, CancellationToken cancellationToken)
+        public async Task<int> CreateComponentAsync(PCComponent component, CancellationToken cancellationToken)
         {
             try
             {
 
-                var tags = await _dbContext.Tag.Where(x=> tagsIds.Any(tag => tag == x.Id)).AsNoTracking().ToListAsync();
+              //  var tags = await _dbContext.Tag.Where(x=> tagsIds.Any(tag => tag == x.Id)).AsNoTracking().ToListAsync();
 
-                component.Tags.AddRange(tags);
-                component.PriceComponent.Add(priceComponent);
-
+              //  component.AddPriceComponent(priceComponent);            
 
                 var result = await _dbContext.PCComponent.AddAsync(component);
-
+                
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
                 var pcComponentId = result.Entity.Id;

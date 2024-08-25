@@ -14,11 +14,11 @@ namespace Infrastructure.Data.Interceptors;
 public class AuditableEntityInterceptor : SaveChangesInterceptor
 {
 private readonly IUser _user;
-private readonly TimeProvider _dateTime;
+private readonly DateTime _dateTime;
 
 public AuditableEntityInterceptor(
     IUser user,
-    TimeProvider dateTime
+    DateTime dateTime
     )
 {
     _user = user;
@@ -48,13 +48,13 @@ public void UpdateEntities(DbContext? context)
         if (entry.State == EntityState.Added)
         {
             entry.Entity.CreatedBy = _user.Id;
-            entry.Entity.Created = _dateTime.GetUtcNow();
+            entry.Entity.Created = _dateTime;
         }
 
         if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
         {
             entry.Entity.LastModifiedBy = _user.Id;
-            entry.Entity.LastModified = _dateTime.GetUtcNow();
+            entry.Entity.LastModified = _dateTime;
         }
     }
 }

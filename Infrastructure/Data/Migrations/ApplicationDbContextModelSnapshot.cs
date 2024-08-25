@@ -232,20 +232,21 @@ namespace Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .IsUnicode(false)
                         .HasColumnType("varchar(256)");
 
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .IsUnicode(false)
                         .HasColumnType("varchar(256)");
@@ -269,6 +270,8 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("PCComponent");
                 });
@@ -296,11 +299,13 @@ namespace Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .IsUnicode(false)
                         .HasColumnType("varchar(256)");
@@ -308,14 +313,13 @@ namespace Infrastructure.Data.Migrations
                     b.Property<DateTime>("EffectiveDate")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime>("ExpriyDate")
+                    b.Property<DateTime?>("ExpriyDate")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .IsUnicode(false)
                         .HasColumnType("varchar(256)");
@@ -335,6 +339,8 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("PCComponentId");
 
                     b.ToTable("PriceComponents");
@@ -348,20 +354,21 @@ namespace Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .IsUnicode(false)
                         .HasColumnType("varchar(256)");
 
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .IsUnicode(false)
                         .HasColumnType("varchar(256)");
@@ -383,6 +390,8 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Tag");
                 });
@@ -438,10 +447,17 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PCBuilder.Domain.Entities.PCComponent", b =>
+                {
+                    b.HasOne("Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany("Components")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("PCBuilder.Domain.Entities.PCComponentTag", b =>
                 {
                     b.HasOne("PCBuilder.Domain.Entities.PCComponent", null)
-                        .WithMany()
+                        .WithMany("PCComponentTags")
                         .HasForeignKey("PCComponentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -455,6 +471,10 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("PCBuilder.Domain.Entities.PriceComponent", b =>
                 {
+                    b.HasOne("Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany("PriceComponents")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("PCBuilder.Domain.Entities.PCComponent", "PCComponent")
                         .WithMany("PriceComponent")
                         .HasForeignKey("PCComponentId")
@@ -464,8 +484,26 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("PCComponent");
                 });
 
+            modelBuilder.Entity("PCBuilder.Domain.Entities.Tag", b =>
+                {
+                    b.HasOne("Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("Infrastructure.Identity.ApplicationUser", b =>
+                {
+                    b.Navigation("Components");
+
+                    b.Navigation("PriceComponents");
+
+                    b.Navigation("Tags");
+                });
+
             modelBuilder.Entity("PCBuilder.Domain.Entities.PCComponent", b =>
                 {
+                    b.Navigation("PCComponentTags");
+
                     b.Navigation("PriceComponent");
                 });
 #pragma warning restore 612, 618

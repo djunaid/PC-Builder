@@ -17,6 +17,9 @@ namespace Application.Tags.ViewModel
         public string Value { get; set; }
 
         //public List<PCComponent> PCComponents { get; } = new();
+        public string TagFullName 
+        {  get   {   return string.Format($"{Name} - {Value}");       } 
+        }
 
         public DateTimeOffset Created { get; set; }
 

@@ -14,7 +14,7 @@ namespace Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<PCComponent> builder)
         {
-            builder.HasMany(e => e.Tags).WithMany(e => e.PCComponents).UsingEntity<PCComponentTag>();
+            builder.HasMany(e => e.Tags).WithMany(e=> e.Components).UsingEntity<PCComponentTag>();
 
             builder.HasMany(e => e.PriceComponent).WithOne(e => e.PCComponent).HasForeignKey(e => e.PCComponentId).IsRequired();
 
@@ -28,13 +28,13 @@ namespace Infrastructure.Data.Configurations
 
             builder.Property(x => x.SystemTimeStamp).IsConcurrencyToken().IsRowVersion();
 
-            builder.Property(x => x.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+            builder.Property(x => x.CreatedBy).HasMaxLength(256).IsUnicode(false);
 
-            builder.Property(x => x.LastModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+            builder.Property(x => x.LastModifiedBy).HasMaxLength(256).IsUnicode(false);
 
             builder.Property(x => x.Created).IsRequired();
 
-            builder.Property(x => x.LastModified).IsRequired();
+            builder.Property(x => x.LastModified);
 
 
 

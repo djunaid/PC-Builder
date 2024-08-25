@@ -3,6 +3,7 @@ using Application.Common.Models.Interface;
 using PCBuilder.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,8 @@ namespace Application.PCComponents.Commands
 
         public decimal Price { get; set; }
 
-
+        public string CreatedBy { get; set; }   
+       
     }
 
     public class CreateComponentHandler : IRequestHandler<CreateComponentCommand, Result>
@@ -36,8 +38,38 @@ namespace Application.PCComponents.Commands
             
             try
             {
-                var response = await _pcComponentRepository.CreateComponentAsync(new PCComponent() { Name = request.Name, Type = request.Type }, request.Tags,
-                     new PriceComponent() { Price = request.Price }, cancellationToken);
+                List<PCComponentTag> pcComponentTags = new();
+                foreach(var tagId in request.Tags)
+                {
+                    PCComponentTag pCComponentTag = new PCComponentTag();
+                    pCComponentTag.TagId = tagId;
+
+                    pcComponentTags.Add(pCComponentTag);
+                }
+
+                PriceComponent price = new PriceComponent
+                {
+                    Price = request.Price,
+                    CreatedBy = request.CreatedBy,
+                    Created = DateTime.UtcNow,
+                    LastModified = DateTime.UtcNow,
+                    EffectiveDate = DateTime.UtcNow
+                };
+
+                PCComponent pCComponent = new PCComponent()
+                {
+                    Name = request.Name,
+                    Type = request.Type,
+                    CreatedBy = request.CreatedBy,
+                    PCComponentTags = pcComponentTags,
+                    Created = DateTime.UtcNow,
+                    LastModified = DateTime.UtcNow,
+                };
+
+                pCComponent.AddPriceComponent(price);
+                
+
+                var response = await _pcComponentRepository.CreateComponentAsync( pCComponent ,  cancellationToken);
 
                 return Result.Success();
 

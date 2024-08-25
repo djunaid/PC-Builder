@@ -12,6 +12,9 @@ namespace PCBuilder.Domain.Entities
         public int PCComponentId { get; set; }
 
         public int TagId { get; set; }
+
+        public PCComponentTag() { 
+        }
        
     }
 }

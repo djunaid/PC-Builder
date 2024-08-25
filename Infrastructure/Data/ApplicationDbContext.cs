@@ -19,7 +19,7 @@ namespace Infrastructure.Data
 
         public DbSet<PCComponent> PCComponent => Set<PCComponent>();
 
-        public DbSet<PCComponentTag> PCComponentTag => Set<PCComponentTag>();
+        //public DbSet<PCComponentTag> PCComponentTag => Set<PCComponentTag>();
 
         public DbSet<PriceComponent> PriceComponents => Set<PriceComponent>();
 
@@ -29,6 +29,8 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            
 
             base.OnModelCreating(builder);
         }

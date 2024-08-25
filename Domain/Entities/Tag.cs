@@ -13,7 +13,9 @@ namespace PCBuilder.Domain.Entities
         
         public string Value { get; set; }
 
-        public List<PCComponent> PCComponents { get; } = new();
+        public List<PCComponent> Components { get; set; }
+
+        public Tag() { }
 
     }
 }

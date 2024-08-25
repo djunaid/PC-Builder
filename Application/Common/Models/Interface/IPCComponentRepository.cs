@@ -15,7 +15,7 @@ namespace Application.Common.Models.Interface
 
         Task<PCComponent> GetComponentByNameAsync (string name);
 
-        Task<int> CreateComponentAsync(PCComponent component, int[] tagIds, PriceComponent priceComponent, CancellationToken cancellationToken);
+        Task<int> CreateComponentAsync(PCComponent component, CancellationToken cancellationToken);
 
         Task DeleteComponentAsync (int id, CancellationToken cancellationToken);
 

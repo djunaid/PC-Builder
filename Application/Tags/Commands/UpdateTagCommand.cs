@@ -20,7 +20,7 @@ public record UpdateTagCommand : IRequest<Result>
 
     public string? UpdatedBy { get; set; }
 
-    public DateTimeOffset? UpdatedDate { get; set; } = DateTimeOffset.Now;
+    public DateTime? UpdatedDate { get; set; } = DateTime.UtcNow;
 
     public byte[] SystemTimeStamp { get; set; }
             

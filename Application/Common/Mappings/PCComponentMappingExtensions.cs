@@ -11,7 +11,7 @@ namespace Application.Common.Mappings
             {
                 Id = origin.Id,
                 Name = origin.Name,
-                PriceComponent = origin.PriceComponent,
+                PriceComponent = origin.PriceComponent.ToList(),
                 Tags = origin.Tags.ToVMList(),
                 Rating = origin.Rating,
                 Type = origin.Type

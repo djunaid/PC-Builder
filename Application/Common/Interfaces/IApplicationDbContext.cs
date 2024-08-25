@@ -9,7 +9,7 @@ namespace Application.Common.Interfaces
     {
         public DbSet<PCComponent> PCComponent { get; }
 
-        public DbSet<PCComponentTag> PCComponentTag { get; }
+      //  public DbSet<PCComponentTag> PCComponentTag { get; }
 
         public DbSet<PriceComponent> PriceComponents { get; }
 
