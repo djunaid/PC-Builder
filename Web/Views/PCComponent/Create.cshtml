@@ -42,7 +42,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
             </div>
-            <input id="tagTypeahead" class=" form-control" placeholder="Search tag name" />
+            <input id="tagTypeahead" class=" form-control" placeholder="Search tag name" autocomplete="off"/>
 
         </div>
 
@@ -121,7 +121,7 @@
     $(document).ready(function () {
 
         var searchTagSource = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace("tagFullName"),
+            datumTokenizer: Bloodhound.tokenizers.nonword("tagFullName"),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
                 url: '/api/Search#%QUERY',
@@ -150,7 +150,8 @@
         $('#tagTypeahead').typeahead({
             highlight: true,
             minLength: 1,
-            hint: true
+            hint: true,
+            limit: 10
         }, {
             name: 'Tags',
             displayKey: 'tagFullName',

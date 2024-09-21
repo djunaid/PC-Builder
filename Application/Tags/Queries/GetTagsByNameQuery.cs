@@ -1,6 +1,6 @@
-﻿using Application.Common.Mappings;
+﻿using Application.Common.Interfaces;
+using Application.Common.Mappings;
 using Application.Tags.ViewModel;
-using Infrastructure.Repositories.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;

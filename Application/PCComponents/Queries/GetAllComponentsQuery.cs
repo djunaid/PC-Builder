@@ -1,6 +1,7 @@
-﻿using Application.Common.Mappings;
-using Application.Common.Models.Interface;
+﻿using Application.Common.Interfaces;
+using Application.Common.Mappings;
 using Application.PCComponents.ViewModel;
+using Ardalis.Result;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace Application.PCComponents.Queries
 {
-    public struct GetAllComponentsQuery : IRequest<IEnumerable<PCComponentVM>>;
+    public struct GetAllComponentsQuery : IRequest<Result<List<PCComponentVM>>>;
 
-    public class GetAllComponentsHandler : IRequestHandler<GetAllComponentsQuery, IEnumerable<PCComponentVM>>
+    public class GetAllComponentsHandler : IRequestHandler<GetAllComponentsQuery, Result<List<PCComponentVM>>>
     {
         private readonly IPCComponentRepository _pcComponentRepository;
         public GetAllComponentsHandler(IPCComponentRepository pcComponentRepository)
@@ -20,11 +21,13 @@ namespace Application.PCComponents.Queries
             _pcComponentRepository = pcComponentRepository;
         }
 
-        public async Task<IEnumerable<PCComponentVM>> Handle(GetAllComponentsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<PCComponentVM>>> Handle(GetAllComponentsQuery request, CancellationToken cancellationToken)
         {
             var components = await _pcComponentRepository.GetAllComponentsAsync();
 
             var componentsVM = components.Select(x => x.ToVM()).ToList();
+
+            
 
             return componentsVM;
         }

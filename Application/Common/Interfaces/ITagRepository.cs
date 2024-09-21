@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Repositories.Interface
+namespace Application.Common.Interfaces
 {
     public interface ITagRepository
     {

@@ -1,4 +1,5 @@
 ﻿using Application.PCComponents.Commands;
+using Application.PCComponents.Queries;
 using Application.PCComponents.ViewModel;
 using Application.Tags.Queries;
 using MediatR;
@@ -19,9 +20,19 @@ namespace Web.Controllers
             _mediatr = mediatr;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<PCComponentVM> pcComponents = new();
+
+            var query = new GetAllComponentsQuery();
+            var result = await _mediatr.Send(query);
+
+            if (result.IsSuccess)
+            {
+                pcComponents = result.Value.ToList();
+            }
+
+            return View(pcComponents);
         }
 
         public async Task<IActionResult> Create()

@@ -1,5 +1,5 @@
-﻿using Application.Common.Models;
-using Application.Common.Models.Interface;
+﻿using Application.Common.Interfaces;
+using Application.Common.Models;
 using PCBuilder.Domain.Entities;
 using System;
 using System.Collections.Generic;

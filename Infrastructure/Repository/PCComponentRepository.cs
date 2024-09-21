@@ -1,5 +1,4 @@
 ﻿using Application.Common.Interfaces;
-using Application.Common.Models.Interface;
 using Microsoft.EntityFrameworkCore;
 using PCBuilder.Domain.Entities;
 using System;
@@ -50,9 +49,9 @@ namespace Infrastructure.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<PCComponent>> GetAllComponentsAsync()
+        public async Task<List<PCComponent>> GetAllComponentsAsync()
         {
-            var components = await _dbContext.PCComponent.AsNoTracking().ToListAsync();
+            var components = await _dbContext.PCComponent.Include(x=> x.PriceComponent).AsNoTracking().ToListAsync();
 
             return components;
         }

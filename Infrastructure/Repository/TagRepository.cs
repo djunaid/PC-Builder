@@ -1,6 +1,5 @@
 ﻿using Application.Common.Interfaces;
 using Azure.Core;
-using Infrastructure.Repositories.Interface;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PCBuilder.Domain.Entities;
