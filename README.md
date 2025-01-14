@@ -67,5 +67,5 @@ This project is licensed under the [MIT License](LICENSE).
 ## Contact
 
 For questions or suggestions, feel free to reach out:
-- **Author**: Junaid
+- **Author**: Danish
 - **GitHub**: [djunaid](https://github.com/djunaid)
